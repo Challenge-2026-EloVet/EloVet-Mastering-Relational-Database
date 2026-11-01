@@ -68,8 +68,9 @@ Reúne as functions, as procedures e a lógica da auditoria. A trigger continua 
 
 #### Functions
 
-- **`fn_monta_json(p_campos IN elo_json_campos) RETURN CLOB`** — recebe uma coleção de `elo_json_campo` e monta a string JSON equivalente por concatenação manual (sem `TO_JSON`, `JSON_OBJECT` ou qualquer função nativa de JSON do Oracle), incluindo escape de aspas e barra invertida.
+- **`fn_monta_json(p_campos IN elo_json_campos) RETURN CLOB`** — recebe uma coleção de `elo_json_campo` e monta a string JSON equivalente por concatenação manual (sem `TO_JSON`, `JSON_OBJECT` ou qualquer função nativa de JSON do Oracle), incluindo escape de aspas e barra invertida. O tipo de campo `JSON` insere um valor que já é um JSON montado (objeto aninhado) sem aspas, o que permite compor objetos dentro de objetos.
 - **`fn_valida_cpf(p_cpf IN VARCHAR2) RETURN VARCHAR2`** — calcula os dois dígitos verificadores do CPF pelo algoritmo oficial (módulo 11) e retorna `'VALIDO'` ou `'INVALIDO'`.
+- **`fn_exporta_valores_novos RETURN CLOB`** — exporta como array JSON as auditorias de `elo_agendamento` gravadas no dia anterior (exceto `DELETE`). Cada objeto traz os metadados da auditoria, o snapshot `valores_novos` gravado pela trigger e os dados descritivos de `pet`, `responsavel`, `veterinario` e `clinica` (com bairro, cidade e estado), como objetos aninhados. Dados pessoais sensíveis (CPF, RG e data de nascimento das pessoas) não são exportados. É a origem dos documentos importados no MongoDB pelo microsserviço de agendamento.
 
 #### Procedures
 
@@ -105,6 +106,7 @@ EXEC pkg_elovet.pr_agenda_json;
 EXEC pkg_elovet.pr_totaliza_idade_pet;
 
 SELECT pkg_elovet.fn_valida_cpf('11144477735') FROM dual;
+SELECT pkg_elovet.fn_exporta_valores_novos FROM dual;
 ```
 
 ## Tecnologias
