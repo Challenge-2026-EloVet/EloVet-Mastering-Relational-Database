@@ -5,7 +5,6 @@
 --   pkg_elovet.pr_audita_agendamento, que contém a lógica de auditoria e o
 --   tratamento de exceções.
 --================================================================================
-DROP TRIGGER trg_auditoria_agendamento;
 
 CREATE OR REPLACE TRIGGER trg_auditoria_agendamento
 AFTER INSERT OR UPDATE OR DELETE ON elo_agendamento
