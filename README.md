@@ -21,12 +21,10 @@ O EloVet conecta clínicas veterinárias, veterinários e responsáveis de pets 
 │   └── ddl.sql                  # Tabelas, constraints, índices, FKs e sequences/triggers de PK
 ├── Type/
 │   └── type_EloVet.sql          # Tipos elo_json_campo / elo_json_campos
-├── Function/
-│   └── function_EloVet.sql      # fn_monta_json e fn_valida_cpf
-├── Procedure/
-│   └── procedure_EloVet.sql     # pr_agenda_json e pr_totaliza_idade_pet
+├── Package/
+│   └── package_EloVet.sql       # pkg_elovet: functions, procedures e lógica de auditoria
 ├── Trigger/
-│   └── trigger_EloVet.sql       # trg_auditoria_agendamento
+│   └── trigger_EloVet.sql       # trg_auditoria_agendamento (chama pkg_elovet)
 └── DML/
     └── carga_de_Dados.sql       # Massa de dados para teste (mínimo 5 registros por tabela)
 ```
@@ -64,21 +62,26 @@ Principais regras de negócio aplicadas via `CHECK`:
 
 - **`elo_json_campo`** / **`elo_json_campos`** — tipo objeto e tabela de objetos que representam pares `nome do campo / valor / tipo`, usados como entrada genérica para a montagem manual de JSON.
 
-### Functions
+### Package `pkg_elovet`
+
+Reúne as functions, as procedures e a lógica da auditoria. A trigger continua como objeto separado, pois o Oracle não permite declarar triggers dentro de uma package.
+
+#### Functions
 
 - **`fn_monta_json(p_campos IN elo_json_campos) RETURN CLOB`** — recebe uma coleção de `elo_json_campo` e monta a string JSON equivalente por concatenação manual (sem `TO_JSON`, `JSON_OBJECT` ou qualquer função nativa de JSON do Oracle), incluindo escape de aspas e barra invertida.
 - **`fn_valida_cpf(p_cpf IN VARCHAR2) RETURN VARCHAR2`** — calcula os dois dígitos verificadores do CPF pelo algoritmo oficial (módulo 11) e retorna `'VALIDO'` ou `'INVALIDO'`.
 
-### Procedures
+#### Procedures
 
 - **`pr_agenda_json`** — faz `JOIN` entre `elo_agendamento`, `elo_pet`, `elo_veterinario` e `elo_clinica` e imprime cada agendamento como um objeto JSON, montado via `fn_monta_json`.
 - **`pr_totaliza_idade_pet`** — percorre `elo_pet` com técnica de **quebra de controle** (control break) para somar `idade_aproximada` por combinação `especie/sexo`, com subtotal por espécie e total geral — sem usar `SUM`, `GROUP BY`, `ROLLUP` ou `CUBE`.
+- **`pr_audita_agendamento`** — lógica da trigger de auditoria. Grava em `elo_auditoria` o usuário da sessão, o tipo de operação, a tabela e o registro afetados, além dos valores `:OLD` e `:NEW` convertidos para JSON via `fn_monta_json`.
 
 ### Trigger
 
-- **`trg_auditoria_agendamento`** — `AFTER INSERT OR UPDATE OR DELETE ON elo_agendamento`, `FOR EACH ROW`. Grava em `elo_auditoria` o usuário da sessão, o tipo de operação, a tabela e o registro afetados, além dos valores `:OLD` e `:NEW` convertidos para JSON via `fn_monta_json`.
+- **`trg_auditoria_agendamento`** — `AFTER INSERT OR UPDATE OR DELETE ON elo_agendamento`, `FOR EACH ROW`. Identifica a operação e repassa `:OLD` e `:NEW` para `pkg_elovet.pr_audita_agendamento`.
 
-Todas as functions, procedures e a trigger tratam exceções específicas (dados ausentes, CPF inválido, conversão numérica, etc.) além de um `WHEN OTHERS` genérico.
+Todas as functions e procedures da package tratam exceções específicas (dados ausentes, CPF inválido, conversão numérica, etc.) além de um `WHEN OTHERS` genérico.
 
 ## Como executar
 
@@ -89,8 +92,7 @@ Execute os scripts nesta ordem:
 ```sql
 @DDL/ddl.sql
 @Type/type_EloVet.sql
-@Function/function_EloVet.sql
-@Procedure/procedure_EloVet.sql
+@Package/package_EloVet.sql
 @Trigger/trigger_EloVet.sql
 @DML/carga_de_Dados.sql
 ```
@@ -99,16 +101,16 @@ Após a carga, é possível testar os objetos criados:
 
 ```sql
 SET SERVEROUTPUT ON;
-EXEC pr_agenda_json;
-EXEC pr_totaliza_idade_pet;
+EXEC pkg_elovet.pr_agenda_json;
+EXEC pkg_elovet.pr_totaliza_idade_pet;
 
-SELECT fn_valida_cpf('11144477735') FROM dual;
+SELECT pkg_elovet.fn_valida_cpf('11144477735') FROM dual;
 ```
 
 ## Tecnologias
 
 - Oracle Database 21c
-- PL/SQL (types, functions, procedures, triggers)
+- PL/SQL (types, packages, functions, procedures, triggers)
 - Modelagem gerada com Oracle SQL Developer Data Modeler
 
 ## Equipe
