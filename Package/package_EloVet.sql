@@ -14,6 +14,8 @@ IS
 
     FUNCTION fn_valida_cpf (p_cpf IN VARCHAR2) RETURN VARCHAR2;
 
+    FUNCTION fn_exporta_valores_novos RETURN CLOB;
+
     PROCEDURE pr_agenda_json;
 
     PROCEDURE pr_totaliza_idade_pet;
@@ -200,6 +202,60 @@ IS
             DBMS_OUTPUT.PUT_LINE('[fn_valida_cpf] Erro inesperado: ' || SQLERRM);
             RETURN 'INVALIDO';
     END fn_valida_cpf;
+
+
+    --============================================================================
+    -- FUNCTION 3 - fn_exporta_valores_novos
+    --   Exporta como um array JSON os valores de elo_auditoria.valores_novos
+    --   gravados no dia anterior (de 00:00:00 de ontem até antes de 00:00:00 de
+    --   hoje). Registros de DELETE não têm valores novos e ficam de fora. O array
+    --   é montado por concatenação, sem funções Oracle prontas de JSON.
+    --============================================================================
+    FUNCTION fn_exporta_valores_novos RETURN CLOB
+    IS
+        CURSOR c_auditoria IS
+            SELECT valores_novos
+            FROM   elo_auditoria
+            WHERE  data_hora_operacao >= TRUNC(SYSDATE) - 1
+            AND    data_hora_operacao <  TRUNC(SYSDATE)
+            AND    valores_novos IS NOT NULL
+            ORDER  BY id_auditoria;
+
+        v_json CLOB;
+
+        v_qtd_linhas PLS_INTEGER := 0;
+
+        e_sem_dados EXCEPTION;
+
+    BEGIN
+        v_json := '[';
+
+        FOR r_auditoria IN c_auditoria LOOP
+            v_qtd_linhas := v_qtd_linhas + 1;
+
+            IF v_qtd_linhas > 1 THEN
+                v_json := v_json || ',';
+            END IF;
+
+            v_json := v_json || r_auditoria.valores_novos;
+        END LOOP;
+
+        IF v_qtd_linhas = 0 THEN
+            RAISE e_sem_dados;
+        END IF;
+
+        v_json := v_json || ']';
+
+        RETURN v_json;
+
+    EXCEPTION
+        WHEN e_sem_dados THEN
+            DBMS_OUTPUT.PUT_LINE('[fn_exporta_valores_novos] Aviso: nao ha valores novos auditados no dia anterior. Retornando array vazio.');
+            RETURN '[]';
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('[fn_exporta_valores_novos] Erro inesperado: ' || SQLERRM);
+            RETURN NULL;
+    END fn_exporta_valores_novos;
 
 
     --============================================================================

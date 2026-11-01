@@ -70,6 +70,7 @@ Reúne as functions, as procedures e a lógica da auditoria. A trigger continua 
 
 - **`fn_monta_json(p_campos IN elo_json_campos) RETURN CLOB`** — recebe uma coleção de `elo_json_campo` e monta a string JSON equivalente por concatenação manual (sem `TO_JSON`, `JSON_OBJECT` ou qualquer função nativa de JSON do Oracle), incluindo escape de aspas e barra invertida.
 - **`fn_valida_cpf(p_cpf IN VARCHAR2) RETURN VARCHAR2`** — calcula os dois dígitos verificadores do CPF pelo algoritmo oficial (módulo 11) e retorna `'VALIDO'` ou `'INVALIDO'`.
+- **`fn_exporta_valores_novos RETURN CLOB`** — retorna como array JSON os valores de `elo_auditoria.valores_novos` gravados no dia anterior. Registros de `DELETE` ficam de fora, e sem registros no período retorna `[]`.
 
 #### Procedures
 
@@ -105,6 +106,7 @@ EXEC pkg_elovet.pr_agenda_json;
 EXEC pkg_elovet.pr_totaliza_idade_pet;
 
 SELECT pkg_elovet.fn_valida_cpf('11144477735') FROM dual;
+SELECT pkg_elovet.fn_exporta_valores_novos FROM dual;
 ```
 
 ## Tecnologias
