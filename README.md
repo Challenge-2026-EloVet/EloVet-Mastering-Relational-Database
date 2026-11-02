@@ -18,7 +18,8 @@ O EloVet conecta clínicas veterinárias, veterinários e responsáveis de pets 
 
 ```
 ├── DDL/
-│   └── ddl.sql                  # Tabelas, constraints, índices, FKs e sequences/triggers de PK
+│   ├── ddl.sql                  # Tabelas, constraints, índices, FKs e sequences/triggers de PK
+│   └── alteracao_clinica_sprint4.sql  # Script incremental: dados de clínica para o app (sem recriar o banco)
 ├── Type/
 │   └── type_EloVet.sql          # Tipos elo_json_campo / elo_json_campos
 ├── Package/
@@ -31,12 +32,12 @@ O EloVet conecta clínicas veterinárias, veterinários e responsáveis de pets 
 
 ## Modelo de dados
 
-O modelo é composto por 12 tabelas principais:
+O modelo é composto por 14 tabelas principais:
 
 | Tabela | Descrição |
 |---|---|
-| `elo_endereco` | Endereços reutilizados por clínicas, responsáveis e veterinários |
-| `elo_clinica` | Clínicas veterinárias parceiras |
+| `elo_endereco` | Endereços reutilizados por clínicas, responsáveis e veterinários, com latitude e longitude opcionais |
+| `elo_clinica` | Clínicas veterinárias parceiras, com avaliação de 0 a 5 |
 | `elo_especialidade` | Especialidades veterinárias (dermatologia, ortopedia, etc.) |
 | `elo_login` | Credenciais e tipo de usuário do sistema |
 | `elo_responsavel` | Tutores dos pets |
@@ -45,6 +46,8 @@ O modelo é composto por 12 tabelas principais:
 | `elo_pet_responsavel` | Associação N:N entre pets e responsáveis |
 | `elo_clinica_veterinario` | Associação N:N entre clínicas e veterinários |
 | `elo_veterinario_especialidade` | Associação N:N entre veterinários e especialidades |
+| `elo_acessibilidade` | Recursos de acessibilidade (rampa, banheiro adaptado, elevador etc.) |
+| `elo_clinica_acessibilidade` | Associação N:N entre clínicas e recursos de acessibilidade |
 | `elo_agendamento` | Consultas agendadas |
 | `elo_auditoria` | Log de auditoria das operações em `elo_agendamento` |
 
@@ -53,6 +56,7 @@ Principais regras de negócio aplicadas via `CHECK`:
 - CPF de responsáveis e veterinários com exatamente 11 dígitos numéricos (validação do dígito verificador é feita à parte, na função `fn_valida_cpf`);
 - CNPJ de clínica com 14 dígitos numéricos;
 - CEP com 8 dígitos numéricos e UF com 2 caracteres;
+- coordenadas do endereço informadas em par (latitude entre -90 e 90, longitude entre -180 e 180) e avaliação da clínica entre 0 e 5;
 - `sexo` do pet restrito a `M`, `F` ou `N`, com `idade_aproximada` não-negativa e obrigatoriedade de `data_nascimento` OU `idade_aproximada`;
 - `status` do agendamento restrito a `AGENDADO`, `CONFIRMADO`, `EM_ATENDIMENTO`, `CONCLUIDO`, `CANCELADO` ou `NAO_COMPARECEU`.
 
@@ -97,6 +101,14 @@ Execute os scripts nesta ordem:
 @Trigger/trigger_EloVet.sql
 @DML/carga_de_Dados.sql
 ```
+
+Para um banco que **já está criado e com dados**, aplique apenas o script incremental, que acrescenta as colunas, tabelas e dados de clínica sem apagar nada:
+
+```sql
+@DDL/alteracao_clinica_sprint4.sql
+```
+
+> As especialidades de cada clínica não ficam em uma tabela própria: são obtidas pelos veterinários que atendem nela (`elo_clinica_veterinario` × `elo_veterinario_especialidade`).
 
 Após a carga, é possível testar os objetos criados:
 
