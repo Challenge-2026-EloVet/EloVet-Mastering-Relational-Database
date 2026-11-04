@@ -8,6 +8,12 @@
 DROP TABLE elo_agendamento CASCADE CONSTRAINTS 
 ;
 
+DROP TABLE elo_clinica_acessibilidade CASCADE CONSTRAINTS 
+;
+
+DROP TABLE elo_acessibilidade CASCADE CONSTRAINTS 
+;
+
 DROP TABLE elo_auditoria CASCADE CONSTRAINTS 
 ;
 
@@ -108,13 +114,19 @@ CREATE TABLE elo_clinica
      cnpj        VARCHAR2 (14)  NOT NULL , 
      telefone    VARCHAR2 (20) , 
      email       VARCHAR2 (150) , 
-     id_endereco NUMBER  NOT NULL 
+     id_endereco NUMBER  NOT NULL , 
+     avaliacao   NUMBER (2,1) 
     ) 
 ;
 
 ALTER TABLE elo_clinica 
     ADD CONSTRAINT ck_elo_clinica_cnpj 
     CHECK (REGEXP_LIKE(cnpj, '^[0-9]{14}$'))
+;
+
+ALTER TABLE elo_clinica 
+    ADD CONSTRAINT ck_elo_clinica_avaliacao 
+    CHECK (avaliacao BETWEEN 0 AND 5)
 ;
 ALTER TABLE elo_clinica 
     ADD CONSTRAINT pk_elo_clinica PRIMARY KEY ( id_clinica ) ;
@@ -146,6 +158,38 @@ ALTER TABLE elo_clinica_veterinario
 ALTER TABLE elo_clinica_veterinario 
     ADD CONSTRAINT uk_elo_clinica_veterinario UNIQUE ( id_clinica , id_veterinario ) ;
 
+CREATE TABLE elo_acessibilidade 
+    ( 
+     id_acessibilidade NUMBER  NOT NULL , 
+     descricao         VARCHAR2 (100)  NOT NULL 
+    ) 
+;
+
+ALTER TABLE elo_acessibilidade 
+    ADD CONSTRAINT pk_elo_acessibilidade PRIMARY KEY ( id_acessibilidade ) ;
+
+ALTER TABLE elo_acessibilidade 
+    ADD CONSTRAINT uk_elo_acessibilidade_descricao UNIQUE ( descricao ) ;
+
+CREATE TABLE elo_clinica_acessibilidade 
+    ( 
+     id_clinica_acessibilidade NUMBER  NOT NULL , 
+     id_clinica                NUMBER  NOT NULL , 
+     id_acessibilidade         NUMBER  NOT NULL 
+    ) 
+;
+CREATE INDEX ix_elo_clinica_acess_clinica ON elo_clinica_acessibilidade 
+    ( 
+     id_clinica ASC 
+    ) 
+;
+
+ALTER TABLE elo_clinica_acessibilidade 
+    ADD CONSTRAINT pk_elo_clinica_acessibilidade PRIMARY KEY ( id_clinica_acessibilidade ) ;
+
+ALTER TABLE elo_clinica_acessibilidade 
+    ADD CONSTRAINT uk_elo_clinica_acessibilidade UNIQUE ( id_clinica , id_acessibilidade ) ;
+
 CREATE TABLE elo_endereco 
     ( 
      id_endereco NUMBER  NOT NULL , 
@@ -155,8 +199,16 @@ CREATE TABLE elo_endereco
      bairro      VARCHAR2 (100)  NOT NULL , 
      cidade      VARCHAR2 (100)  NOT NULL , 
      estado      VARCHAR2 (2)  NOT NULL , 
-     cep         VARCHAR2 (8)  NOT NULL 
+     cep         VARCHAR2 (8)  NOT NULL , 
+     latitude    NUMBER (9,6) , 
+     longitude   NUMBER (9,6) 
     ) 
+;
+
+ALTER TABLE elo_endereco 
+    ADD CONSTRAINT ck_elo_endereco_coordenadas 
+    CHECK ((latitude IS NULL AND longitude IS NULL) 
+        OR (latitude BETWEEN -90 AND 90 AND longitude BETWEEN -180 AND 180))
 ;
 
 ALTER TABLE elo_endereco 
@@ -419,6 +471,28 @@ ALTER TABLE elo_agendamento
     ) 
 ;
 
+ALTER TABLE elo_clinica_acessibilidade 
+    ADD CONSTRAINT fk_elo_clinica_acess_clinica FOREIGN KEY 
+    ( 
+     id_clinica
+    ) 
+    REFERENCES elo_clinica 
+    ( 
+     id_clinica
+    ) 
+;
+
+ALTER TABLE elo_clinica_acessibilidade 
+    ADD CONSTRAINT fk_elo_clinica_acess_acessibilidade FOREIGN KEY 
+    ( 
+     id_acessibilidade
+    ) 
+    REFERENCES elo_acessibilidade 
+    ( 
+     id_acessibilidade
+    ) 
+;
+
 ALTER TABLE elo_clinica 
     ADD CONSTRAINT fk_elo_clinica_endereco FOREIGN KEY 
     ( 
@@ -584,6 +658,32 @@ BEGIN
 END;
 /
 
+CREATE SEQUENCE elo_acessibilidade_id_acessibilidade_SEQ 
+START WITH 1 
+    NOCACHE ;
+
+CREATE OR REPLACE TRIGGER elo_acessibilidade_id_acessibilidade_TRG 
+BEFORE INSERT ON elo_acessibilidade 
+FOR EACH ROW 
+WHEN (NEW.id_acessibilidade IS NULL) 
+BEGIN 
+    :NEW.id_acessibilidade := elo_acessibilidade_id_acessibilidade_SEQ.NEXTVAL; 
+END;
+/
+
+CREATE SEQUENCE elo_clinica_acessibilidade_id_clinica_acessibilidade_SEQ 
+START WITH 1 
+    NOCACHE ;
+
+CREATE OR REPLACE TRIGGER elo_clinica_acessibilidade_id_clinica_acessibilidade_TRG 
+BEFORE INSERT ON elo_clinica_acessibilidade 
+FOR EACH ROW 
+WHEN (NEW.id_clinica_acessibilidade IS NULL) 
+BEGIN 
+    :NEW.id_clinica_acessibilidade := elo_clinica_acessibilidade_id_clinica_acessibilidade_SEQ.NEXTVAL; 
+END;
+/
+
 CREATE SEQUENCE elo_especialidade_id_especialidade_SEQ 
 START WITH 1 
     NOCACHE ;
@@ -679,7 +779,7 @@ END;
 
 -- Relatório do Resumo do Oracle SQL Developer Data Modeler: 
 -- 
--- CREATE TABLE                            12
+-- CREATE TABLE                            14
 -- CREATE INDEX                            10
 -- ALTER TABLE                             50
 -- CREATE VIEW                              0
@@ -688,7 +788,7 @@ END;
 -- CREATE PACKAGE BODY                      0
 -- CREATE PROCEDURE                         0
 -- CREATE FUNCTION                          0
--- CREATE TRIGGER                          12
+-- CREATE TRIGGER                          14
 -- ALTER TRIGGER                            0
 -- CREATE COLLECTION TYPE                   0
 -- CREATE STRUCTURED TYPE                   0
@@ -701,7 +801,7 @@ END;
 -- CREATE DISK GROUP                        0
 -- CREATE ROLE                              0
 -- CREATE ROLLBACK SEGMENT                  0
--- CREATE SEQUENCE                         12
+-- CREATE SEQUENCE                         14
 -- CREATE MATERIALIZED VIEW                 0
 -- CREATE MATERIALIZED VIEW LOG             0
 -- CREATE SYNONYM                           0

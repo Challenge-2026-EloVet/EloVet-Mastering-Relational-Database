@@ -1,0 +1,370 @@
+[
+    {
+        "id_auditoria": 9,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 9,
+        "valores_novos": {
+            "id_agendamento": 9,
+            "id_pet": 1,
+            "id_veterinario": 1,
+            "id_clinica": 1,
+            "status": "CONCLUIDO",
+            "data_hora": "10/08/2026 09:00"
+        },
+        "pet": {
+            "id_pet": 1,
+            "nome": "Rex",
+            "especie": "Canino",
+            "raca": "SRD",
+            "sexo": "M",
+            "data_nascimento": null,
+            "idade_aproximada": 5,
+            "castrado": "SIM"
+        },
+        "responsavel": {
+            "id_responsavel": 1,
+            "nome_completo": "Ana Beatriz Souza",
+            "telefone": "11987650001"
+        },
+        "veterinario": {
+            "id_veterinario": 1,
+            "nome_completo": "Fabio Ramos",
+            "crmv": "CRMV-SP 10234",
+            "telefone": "11976540001"
+        },
+        "clinica": {
+            "id_clinica": 1,
+            "nome": "Elo Vet Pinheiros",
+            "cnpj": "12345678000190",
+            "telefone": "1130451122",
+            "email": "contato@elovet-pinheiros.com.br",
+            "bairro": "Pinheiros",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    },
+    {
+        "id_auditoria": 10,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 10,
+        "valores_novos": {
+            "id_agendamento": 10,
+            "id_pet": 2,
+            "id_veterinario": 2,
+            "id_clinica": 1,
+            "status": "AGENDADO",
+            "data_hora": "15/09/2026 10:30"
+        },
+        "pet": {
+            "id_pet": 2,
+            "nome": "Luna",
+            "especie": "Canino",
+            "raca": "Poodle",
+            "sexo": "F",
+            "data_nascimento": null,
+            "idade_aproximada": 3,
+            "castrado": "SIM"
+        },
+        "responsavel": {
+            "id_responsavel": 1,
+            "nome_completo": "Ana Beatriz Souza",
+            "telefone": "11987650001"
+        },
+        "veterinario": {
+            "id_veterinario": 2,
+            "nome_completo": "Gabriela Torres",
+            "crmv": "CRMV-SP 10567",
+            "telefone": "11976540002"
+        },
+        "clinica": {
+            "id_clinica": 1,
+            "nome": "Elo Vet Pinheiros",
+            "cnpj": "12345678000190",
+            "telefone": "1130451122",
+            "email": "contato@elovet-pinheiros.com.br",
+            "bairro": "Pinheiros",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    },
+    {
+        "id_auditoria": 11,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 11,
+        "valores_novos": {
+            "id_agendamento": 11,
+            "id_pet": 3,
+            "id_veterinario": 3,
+            "id_clinica": 2,
+            "status": "CONFIRMADO",
+            "data_hora": "12/09/2026 14:00"
+        },
+        "pet": {
+            "id_pet": 3,
+            "nome": "Thor",
+            "especie": "Canino",
+            "raca": "Labrador",
+            "sexo": "M",
+            "data_nascimento": null,
+            "idade_aproximada": 7,
+            "castrado": "NAO"
+        },
+        "responsavel": {
+            "id_responsavel": 2,
+            "nome_completo": "Bruno Cesar Lima",
+            "telefone": "11987650002"
+        },
+        "veterinario": {
+            "id_veterinario": 3,
+            "nome_completo": "Henrique Alves",
+            "crmv": "CRMV-SP 10891",
+            "telefone": "11976540003"
+        },
+        "clinica": {
+            "id_clinica": 2,
+            "nome": "Elo Vet Moema",
+            "cnpj": "23456789000181",
+            "telefone": "1130452233",
+            "email": "contato@elovet-moema.com.br",
+            "bairro": "Moema",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    },
+    {
+        "id_auditoria": 12,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 12,
+        "valores_novos": {
+            "id_agendamento": 12,
+            "id_pet": 4,
+            "id_veterinario": 4,
+            "id_clinica": 3,
+            "status": "CONCLUIDO",
+            "data_hora": "20/08/2026 11:15"
+        },
+        "pet": {
+            "id_pet": 4,
+            "nome": "Mel",
+            "especie": "Felino",
+            "raca": "SRD",
+            "sexo": "F",
+            "data_nascimento": null,
+            "idade_aproximada": 2,
+            "castrado": "SIM"
+        },
+        "responsavel": {
+            "id_responsavel": 3,
+            "nome_completo": "Carla Fernandes",
+            "telefone": "11987650003"
+        },
+        "veterinario": {
+            "id_veterinario": 4,
+            "nome_completo": "Isabela Rocha",
+            "crmv": "CRMV-SP 11023",
+            "telefone": "11976540004"
+        },
+        "clinica": {
+            "id_clinica": 3,
+            "nome": "Elo Vet Tatuape",
+            "cnpj": "34567890000172",
+            "telefone": "1130453344",
+            "email": "contato@elovet-tatuape.com.br",
+            "bairro": "Tatuape",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    },
+    {
+        "id_auditoria": 13,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 13,
+        "valores_novos": {
+            "id_agendamento": 13,
+            "id_pet": 5,
+            "id_veterinario": 1,
+            "id_clinica": 1,
+            "status": "CANCELADO",
+            "data_hora": "25/08/2026 16:00"
+        },
+        "pet": {
+            "id_pet": 5,
+            "nome": "Nina",
+            "especie": "Felino",
+            "raca": "Siames",
+            "sexo": "F",
+            "data_nascimento": null,
+            "idade_aproximada": 4,
+            "castrado": "SIM"
+        },
+        "responsavel": {
+            "id_responsavel": 3,
+            "nome_completo": "Carla Fernandes",
+            "telefone": "11987650003"
+        },
+        "veterinario": {
+            "id_veterinario": 1,
+            "nome_completo": "Fabio Ramos",
+            "crmv": "CRMV-SP 10234",
+            "telefone": "11976540001"
+        },
+        "clinica": {
+            "id_clinica": 1,
+            "nome": "Elo Vet Pinheiros",
+            "cnpj": "12345678000190",
+            "telefone": "1130451122",
+            "email": "contato@elovet-pinheiros.com.br",
+            "bairro": "Pinheiros",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    },
+    {
+        "id_auditoria": 14,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 14,
+        "valores_novos": {
+            "id_agendamento": 14,
+            "id_pet": 6,
+            "id_veterinario": 5,
+            "id_clinica": 4,
+            "status": "AGENDADO",
+            "data_hora": "20/09/2026 08:30"
+        },
+        "pet": {
+            "id_pet": 6,
+            "nome": "Bidu",
+            "especie": "Canino",
+            "raca": "Vira-lata",
+            "sexo": "M",
+            "data_nascimento": null,
+            "idade_aproximada": 1,
+            "castrado": "NAO"
+        },
+        "responsavel": {
+            "id_responsavel": 4,
+            "nome_completo": "Diego Martins",
+            "telefone": "11987650004"
+        },
+        "veterinario": {
+            "id_veterinario": 5,
+            "nome_completo": "Joao Pedro Salles",
+            "crmv": "CRMV-SP 11345",
+            "telefone": "11976540005"
+        },
+        "clinica": {
+            "id_clinica": 4,
+            "nome": "Elo Vet Santo Amaro",
+            "cnpj": "45678901000163",
+            "telefone": "1130454455",
+            "email": "contato@elovet-santoamaro.com.br",
+            "bairro": "Santo Amaro",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    },
+    {
+        "id_auditoria": 15,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 15,
+        "valores_novos": {
+            "id_agendamento": 15,
+            "id_pet": 7,
+            "id_veterinario": 2,
+            "id_clinica": 1,
+            "status": "NAO_COMPARECEU",
+            "data_hora": "05/08/2026 13:45"
+        },
+        "pet": {
+            "id_pet": 7,
+            "nome": "Miau",
+            "especie": "Felino",
+            "raca": "Persa",
+            "sexo": "M",
+            "data_nascimento": null,
+            "idade_aproximada": 6,
+            "castrado": "SIM"
+        },
+        "responsavel": {
+            "id_responsavel": 4,
+            "nome_completo": "Diego Martins",
+            "telefone": "11987650004"
+        },
+        "veterinario": {
+            "id_veterinario": 2,
+            "nome_completo": "Gabriela Torres",
+            "crmv": "CRMV-SP 10567",
+            "telefone": "11976540002"
+        },
+        "clinica": {
+            "id_clinica": 1,
+            "nome": "Elo Vet Pinheiros",
+            "cnpj": "12345678000190",
+            "telefone": "1130451122",
+            "email": "contato@elovet-pinheiros.com.br",
+            "bairro": "Pinheiros",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    },
+    {
+        "id_auditoria": 16,
+        "tipo_operacao": "INSERT",
+        "data_hora_operacao": "01/11/2026 00:37:27",
+        "usuario_banco": "RM561728",
+        "id_agendamento": 16,
+        "valores_novos": {
+            "id_agendamento": 16,
+            "id_pet": 8,
+            "id_veterinario": 3,
+            "id_clinica": 2,
+            "status": "EM_ATENDIMENTO",
+            "data_hora": "09/09/2026 15:00"
+        },
+        "pet": {
+            "id_pet": 8,
+            "nome": "Amora",
+            "especie": "Felino",
+            "raca": "SRD",
+            "sexo": "F",
+            "data_nascimento": null,
+            "idade_aproximada": 3,
+            "castrado": "NAO"
+        },
+        "responsavel": {
+            "id_responsavel": 5,
+            "nome_completo": "Elisa Nogueira",
+            "telefone": "11987650005"
+        },
+        "veterinario": {
+            "id_veterinario": 3,
+            "nome_completo": "Henrique Alves",
+            "crmv": "CRMV-SP 10891",
+            "telefone": "11976540003"
+        },
+        "clinica": {
+            "id_clinica": 2,
+            "nome": "Elo Vet Moema",
+            "cnpj": "23456789000181",
+            "telefone": "1130452233",
+            "email": "contato@elovet-moema.com.br",
+            "bairro": "Moema",
+            "cidade": "Sao Paulo",
+            "estado": "SP"
+        }
+    }
+]
